@@ -35,8 +35,8 @@ add_custom_command(
   DEPENDS ${cxx_file} ${gccxml_inc_file}
   )
 
-set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py CACHE INTERNAL "idx generator path")
-set(PYGCCXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pygccxml CACHE INTERNAL "pygccxml path")
+set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
+set(PYGCCXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pygccxml)
 
 set(idx_file "example.idx")
 add_custom_command(
