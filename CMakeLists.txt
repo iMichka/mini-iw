@@ -10,17 +10,16 @@ file(MAKE_DIRECTORY ${output_dir})
 
 set(cxx_file ${CMAKE_CURRENT_SOURCE_DIR}/example.cxx)
 set(xml_file ${output_dir}/example.xml)
+set(idx_file ${output_dir}/example.idx)
 
-set(ADDITIONAL_GCC_XML_FLAGS )
+set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
+set(PYGCCXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pygccxml)
 
 set(CONFIG_GCCXML_INC_CONTENTS "")
 set(gccxml_inc_file ${CMAKE_CURRENT_SOURCE_DIR}/gcc_xml.inc)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/gcc_xml.inc.in" "${gccxml_inc_file}" @ONLY)
 
-set(ADDITIONAL_GCC_XML_FLAGS "")
-if(MSVC90)
-  set(ADDITIONAL_GCC_XML_FLAGS "-D\"_HAS_TR1=0\"" )
-endif()
+configure_file("wrap_.cxx.in" "${cxx_file}" @ONLY)
 
 add_custom_command(
   OUTPUT ${xml_file}
@@ -30,15 +29,10 @@ add_custom_command(
         --gccxml-gcc-options ${gccxml_inc_file}
         -DCABLE_CONFIGURATION
         -DITK_MANUAL_INSTANTIATION
-        ${ADDITIONAL_GCC_XML_FLAGS}
         ${cxx_file}
   DEPENDS ${cxx_file} ${gccxml_inc_file}
   )
 
-set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
-set(PYGCCXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pygccxml)
-
-set(idx_file "example.idx")
 add_custom_command(
   OUTPUT ${idx_file}
   COMMAND ${IDX_GENERATOR}
