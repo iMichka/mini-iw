@@ -1,3 +1,3 @@
 /* File: example.h */
 
-bool myfunc(std::string &value);
+bool myfunc(int value);
