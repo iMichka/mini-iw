@@ -12,12 +12,17 @@ set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/output)
 file(MAKE_DIRECTORY ${output_dir})
 
 set(cxx_file ${CMAKE_CURRENT_SOURCE_DIR}/example.cxx)
+set(cpp_file ${CMAKE_CURRENT_BINARY_DIR}/output/examplePython.cpp)
 set(wrap_xxx_file ${CMAKE_CURRENT_BINARY_DIR}/output/wrap_example.cxx)
 set(xml_file ${output_dir}/example.xml)
 set(idx_file ${output_dir}/example.idx)
+set(interface_file ${output_dir}/example.i)
+set(python_file ${output_dir}/example.py)
 
 set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
+set(I_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/igenerator.py)
 set(PYGCCXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pygccxml)
+set(SWIG_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/swig/bin/swig)
 
 # Define the gcc_xml.inc file, which contains lines with the include paths (-I)
 # Set in the itk_wrap_module_gccxml macro in ITK
@@ -32,6 +37,7 @@ set(GCC_XML_INCLUDES "#include \"example.h\"\n")
 
 configure_file("wrap_.cxx.in" ${wrap_xxx_file} @ONLY)
 
+########## Create the .xml file ##################
 add_custom_command(
   OUTPUT ${xml_file}
   COMMAND ${GCCXML}
@@ -44,6 +50,7 @@ add_custom_command(
   DEPENDS ${wrap_xxx_file} ${gccxml_inc_file}
   )
 
+########## Create the .idx file ##################
 add_custom_command(
   OUTPUT ${idx_file}
   COMMAND ${IDX_GENERATOR}
@@ -51,4 +58,34 @@ add_custom_command(
   DEPENDS ${IDX_GENERATOR} ${xml_file}
 )
 
-add_custom_target(run ALL DEPENDS ${idx_file})
+########## Create the .i file ####################
+add_custom_command(
+  OUTPUT ${interface_file}
+  COMMAND ${I_GENERATOR}
+    -w1 -w3 -w51 -w52 -w53 -w54
+    -A protected -A private
+    -p ${PYGCCXML_DIR}
+    -g ${GCCXML}
+    ${xml_file}
+    ${interface_file}
+  DEPENDS ${idx_file} ${I_GENERATOR}
+)
+
+########## Run swig #############################
+set(py3arg)
+if(PYTHON_VERSION_STRING VERSION_GREATER 3.0)
+  set(py3arg "-py3")
+endif()
+add_custom_command(
+    OUTPUT ${cpp_file} ${python_file}
+    COMMAND ${SWIG_COMMAND} -c++ -python -O
+    ${py3arg}
+    -o ${cpp_file}
+    -outdir ${output_dir}
+    ${interface_file}
+    WORKING_DIRECTORY ${output_dir}
+    DEPENDS ${interface_file}
+  )
+
+add_custom_target(run ALL DEPENDS ${cpp_file})
+
