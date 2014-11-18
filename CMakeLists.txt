@@ -18,6 +18,7 @@ set(xml_file ${output_dir}/example.xml)
 set(idx_file ${output_dir}/example.idx)
 set(interface_file ${output_dir}/example.i)
 set(python_file ${output_dir}/example.py)
+set(lib example) # _name of the final .so file
 
 set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
 set(I_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/igenerator.py)
@@ -87,5 +88,19 @@ add_custom_command(
     DEPENDS ${interface_file}
   )
 
-add_custom_target(run ALL DEPENDS ${cpp_file})
+# Tell cmake were to put the .so file
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_dir})
 
+# Add -I/usr/include/pythonx.y to the /usr/bin/c++ call
+# So that Python.h is found
+include_directories(${PYTHON_INCLUDE_PATH})
+
+# Compile (example of what is called here):
+# /usr/bin/c++ -DExample1_EXPORTS -fPIC -I/usr/include/python2.7 -o CMakeFiles/"${lib}".dir/output/examplePython.cpp.o -c /home/mpopoff/repo/builds/mini-iw/output/examplePython.cpp
+add_library("${lib}" MODULE ${cpp_file} ${cxx_file})
+
+# By default we get libexample.so, change this to _example.so
+set_target_properties("${lib}" PROPERTIES PREFIX "_")
+
+# Needed ?
+#target_link_libraries("${lib}" ${PYTHON_LIBRARY})
