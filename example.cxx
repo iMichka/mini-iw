@@ -4,7 +4,7 @@
 
 bool myfunc(int value)
 {
-  return value
+  return value;
 }
 
 
