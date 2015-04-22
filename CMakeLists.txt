@@ -19,6 +19,7 @@ set(idx_file ${output_dir}/example.idx)
 set(interface_file ${output_dir}/example.i)
 set(python_file ${output_dir}/example.py)
 set(lib example) # _name of the final .so file
+set(WRAPPER_MODULE_NAME example) # Will be set in wrap_.cxx.in
 
 set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
 set(I_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/igenerator.py)
@@ -87,6 +88,7 @@ add_custom_command(
     WORKING_DIRECTORY ${output_dir}
     DEPENDS ${interface_file} swig
   )
+# swig/bin/swig -c++ -python -O -o output/examplePython.cpp -outdir output output/example.i
 
 # Tell cmake were to put the .so file
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_dir})
@@ -103,4 +105,4 @@ add_library("${lib}" MODULE ${cpp_file} ${cxx_file})
 set_target_properties("${lib}" PROPERTIES PREFIX "_")
 
 # Needed ?
-#target_link_libraries("${lib}" ${PYTHON_LIBRARY})
+target_link_libraries("${lib}" ${PYTHON_LIBRARY})
