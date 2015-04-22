@@ -85,7 +85,7 @@ add_custom_command(
     -outdir ${output_dir}
     ${interface_file}
     WORKING_DIRECTORY ${output_dir}
-    DEPENDS ${interface_file}
+    DEPENDS ${interface_file} swig
   )
 
 # Tell cmake were to put the .so file
