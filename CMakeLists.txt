@@ -10,6 +10,7 @@ include(Tools.cmake)
 
 set(output_dir ${CMAKE_CURRENT_BINARY_DIR}/output)
 file(MAKE_DIRECTORY ${output_dir})
+file(COPY exampleTest.py DESTINATION ${output_dir})
 
 set(cxx_file ${CMAKE_CURRENT_SOURCE_DIR}/example.cxx)
 set(cpp_file ${CMAKE_CURRENT_BINARY_DIR}/output/examplePython.cpp)
