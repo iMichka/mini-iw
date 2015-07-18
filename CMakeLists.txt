@@ -14,7 +14,7 @@ file(COPY exampleTest.py DESTINATION ${output_dir})
 
 set(cxx_file ${CMAKE_CURRENT_SOURCE_DIR}/example.cxx)
 set(cpp_file ${CMAKE_CURRENT_BINARY_DIR}/output/examplePython.cpp)
-set(wrap_xxx_file ${CMAKE_CURRENT_BINARY_DIR}/output/wrap_example.cxx)
+set(wrap_cxx_file ${CMAKE_CURRENT_BINARY_DIR}/output/wrap_example.cxx)
 set(xml_file ${output_dir}/example.xml)
 set(idx_file ${output_dir}/example.idx)
 set(interface_file ${output_dir}/example.i)
@@ -38,7 +38,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/gcc_xml.inc.in" "${gccxml_inc_file}"
 # (triggered by itk_wrap_class in the .wrap files)
 set(GCC_XML_INCLUDES "#include \"example.h\"\n")
 
-configure_file("wrap_.cxx.in" ${wrap_xxx_file} @ONLY)
+configure_file("wrap_.cxx.in" ${wrap_cxx_file} @ONLY)
 
 ########## Create the .xml file ##################
 add_custom_command(
@@ -49,8 +49,8 @@ add_custom_command(
         --gccxml-gcc-options ${gccxml_inc_file}
         -DCABLE_CONFIGURATION
         -DITK_MANUAL_INSTANTIATION
-        ${wrap_xxx_file}
-  DEPENDS ${wrap_xxx_file} ${gccxml_inc_file}
+        ${wrap_cxx_file}
+  DEPENDS ${wrap_cxx_file} ${gccxml_inc_file}
   )
 
 ########## Create the .idx file ##################
