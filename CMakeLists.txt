@@ -18,7 +18,7 @@ set(xml_file ${output_dir}/example.xml)
 set(idx_file ${output_dir}/example.idx)
 set(interface_file ${output_dir}/example.i)
 set(python_file ${output_dir}/example.py)
-set(lib example) # _name of the final .so file
+set(lib examplePython) # _name of the final .so file
 set(WRAPPER_MODULE_NAME example) # Will be set in wrap_.cxx.in
 
 set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py)
@@ -101,7 +101,7 @@ include_directories(${PYTHON_INCLUDE_PATH})
 # /usr/bin/c++ -DExample1_EXPORTS -fPIC -I/usr/include/python2.7 -o CMakeFiles/"${lib}".dir/output/examplePython.cpp.o -c /home/mpopoff/repo/builds/mini-iw/output/examplePython.cpp
 add_library("${lib}" MODULE ${cpp_file} ${cxx_file})
 
-# By default we get libexample.so, change this to _example.so
+# By default we get libexamplePython.so, change this to _examplePython.so
 set_target_properties("${lib}" PROPERTIES PREFIX "_")
 
 # Needed ?
