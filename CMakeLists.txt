@@ -31,7 +31,7 @@ set(SWIG_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/swig/bin/swig)
 # Set in the itk_wrap_module_gccxml macro in ITK
 set(CONFIG_GCCXML_INC_CONTENTS "-I${CMAKE_CURRENT_SOURCE_DIR}\n")
 set(CONFIG_GCCXML_INC_CONTENTS "${CONFIG_GCCXML_INC_CONTENTS}-I${PYTHON_INCLUDE_PATH}\n")
-set(gccxml_inc_file ${CMAKE_CURRENT_SOURCE_DIR}/output/gcc_xml.inc)
+set(gccxml_inc_file ${output_dir}/gcc_xml.inc)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/gcc_xml.inc.in" "${gccxml_inc_file}" @ONLY)
 
 # Automatically set by the itk_wrap_include_gccxml macro in ITK
